@@ -1,7 +1,7 @@
 FROM fedora:latest
 
-LABEL maintainer="you@example.com" \
-      description="Farming Simulator 22 Dedicated Server (Wine, Fedora base)"
+LABEL maintainer="belamadar" \
+      description="Farming Simulator 22 Dedicated Server (Wine, Fedora base) in Docker"
 
 RUN dnf install -y \
     wine \
@@ -21,12 +21,11 @@ RUN useradd -m $USER && \
     mkdir -p /fs22/{game,installer,config,dlc} && \
     chown -R $USER:$USER /fs22
 
+COPY --chmod=0755 --chown=$USER:$USER entrypoint.sh /fs22/entrypoint.sh
+
 USER $USER
 WORKDIR /fs22
 
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-
 EXPOSE 10823/udp 10823/tcp 8080/tcp
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/fs22/entrypoint.sh"]
