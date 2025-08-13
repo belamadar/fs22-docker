@@ -11,6 +11,10 @@ RUN dnf install -y \
     unzip \
     procps \
     wget \
+    xorg-x11-server-Xvfb \
+    xdotool \
+    tigervnc-server \
+    fluxbox \
     && dnf clean all
 
 ENV WINEPREFIX=/fs22/.wine
@@ -26,6 +30,7 @@ COPY --chmod=0755 --chown=$USER:$USER entrypoint.sh /fs22/entrypoint.sh
 USER $USER
 WORKDIR /fs22
 
-EXPOSE 10823/udp 10823/tcp 8080/tcp
+EXPOSE 10823/udp 10823/tcp 8080/tcp 5900/tcp
 
-ENTRYPOINT ["/fs22/entrypoint.sh"]
+CMD ["/usr/bin/vncserver", ":0", "-SecurityTypes", "None"]
+# ENTRYPOINT ["/fs22/entrypoint.sh"]
